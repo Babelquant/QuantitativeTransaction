@@ -7,7 +7,7 @@ from mitmproxy import http
 from mitmproxy import flow
 import time
 
-class HandleTonghuashun(object):
+class HandleTonghuashun(object): 
     def __init__(self):
         #self.d = u2.connect_wifi("192.168.1.55")
         self.d = u2.connect()
