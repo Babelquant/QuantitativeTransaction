@@ -48,12 +48,11 @@ class LimitUp:
                 body = json.loads(flow.response.text)
                 page = body['data']['page']
                 page_count = math.ceil(page['total']/page['limit'])
-
                 #获取翻页全量数据
                 export = ExportExcel()
                 rows = []
 
-                for i in range(1,page_count):
+                for i in range(1,page_count+1):
                     args = {'page': i,'limit': 15,'field': '199112,10,9001,330323,330324,330325,9002,330329,\
                             133971,133970,1968584,3475914,9003,9004','filter': 'HS,GEM2STAR','order_field': 330324,\
                             'order_type': 0,'data': '','_': 1657151054188}
@@ -67,6 +66,8 @@ class LimitUp:
                                     info['reason_type'],info['limit_up_type'],info['high_days'],\
                                     round(info['change_rate'],1) ]
                             rows.append(row)
+                    else:
+                        ctx.log.warn("response failed.code:%i\n"%rsp_body['status_code']) 
                 export.exportData(rows)    
             else:
                 ctx.log.warn("request failed.code:%i\n"%flow.response.status_code)  
