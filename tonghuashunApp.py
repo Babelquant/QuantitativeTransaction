@@ -9,7 +9,8 @@ import time
 
 class HandleTonghuashun(object):
     def __init__(self):
-        self.d = u2.connect_wifi("192.168.1.54")
+        #self.d = u2.connect_wifi("192.168.1.55")
+        self.d = u2.connect()
         self.appname = "com.hexin.plat.android"
         self.watcher()
 
