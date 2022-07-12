@@ -27,14 +27,17 @@ class HandleTonghuashun(object):
         #if self.d.wait_activity(".Hexin",timeout=5):
         self.d(text="自选").click_exists(timeout=3)
 
-    def UpLimit(self):
+    def UpLimitPool(self):
         self.d(text="涨停聚焦").click_exists(timeout=3)
+
+    def HotList(self):
+        self.d(text="同花顺热榜").click_exists(timeout=3)
 
 
 def main():
     h = HandleTonghuashun()
     h.startApp()
-    h.UpLimit()
+    h.UpLimitPool()
 
 if __name__ == "__main__":
     main()

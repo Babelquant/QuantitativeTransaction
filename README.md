@@ -1,3 +1,57 @@
+# Installation
+1.Install uiautomator2
+```python
+# Since uiautomator2 is still under development, you have to add --pre to install the development version
+pip install --upgrade --pre uiautomator2
+
+# Or you can install directly from github source
+git clone https://github.com/openatx/uiautomator2
+pip install -e uiautomator2
+```
+测试是否安装成功 uiautomator2 --help
+
+2.Install daemons to a device (Optional)
+
+电脑连接上一个手机或多个手机, 确保adb已经添加到环境变量中，执行下面的命令会自动安装本库所需要的设备端程序：uiautomator-server 、atx-agent、openstf/minicap、openstf/minitouch
+```python
+# init 所有的已经连接到电脑的设备
+python -m uiautomator2 init
+
+# 高阶用法
+# init and set atx-agent listen in all address
+python -m uiautomator2 init --addr :7912
+```
+安装提示success即可
+
+3.安装第三方抓包工具
+```python
+pip install mitmproxy
+```
+- 安装证书
+
+  手机端访问 https://mitm.it 安装到user即可（无需root后安装到system）
+
+4.安装Android模拟环境夜神模拟器
+
+（已验证Android5版本）
+
+- 设置开启网络桥接模式
+
+- adb连接设备，执行u2初始化
+  ```python
+  python -m uiautomator2 init
+  ```
+
+- 设置手机网络代理
+
+  地址端口为第三方抓包工具服务地址端口（保证可ping通）
+
+- 安装同花顺app
+
+  `已验证版本Version 10.13.02`
+
+<br>
+
 # QuantitativeTransaction
 
 手机app模拟调试环境
