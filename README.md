@@ -188,7 +188,7 @@ pip install mitmproxy
   手机检查证书是否安装：
    Settings -> Security -> Certificates -> 'User'-section should now list the certificates you have just installed.
 
-   ![安全与凭据](./img/%E4%BF%A1%E4%BB%BB%E7%9A%84%E5%87%AD%E6%8D%AE2.png) 
+   ![安全与凭据](./img/user_cart.png) 
    
 
   Android证书安装：
