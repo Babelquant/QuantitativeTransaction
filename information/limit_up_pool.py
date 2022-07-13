@@ -2,22 +2,21 @@
 """
 scrape limit up stocks
 """
-
-from operator import index
-import re
-from mitmproxy import ctx
-from mitmproxy import http
-import json,time,os
+import json,time,os,sys
 import pandas as pds
 import math
 import requests as rq
+import common
+
+#当DataFrame的列名含有中文时，pandas就无法准确的控制列宽，从而导致列名和列没有对齐
+pds.set_option('display.unicode.ambiguous_as_wide', True)
+pds.set_option('display.unicode.east_asian_width', True)
 
 class LimitUpStocks:
     def __init__(self):
         self.url = "https://data.10jqka.com.cn/dataapi/limit_up/limit_up_pool"
         self.stocks_head = ['股票名','涨停价','流通值','涨停原因','涨停形态','几天几板','换手率']
         self.reason_head = ['涨停股票数','占比','相关股票']
-        self.save_path = "C:\\Users\\Administrator\\Desktop\\test.xlsx"
         self.date = time.strftime('%m-%d',time.localtime(time.time()))
         self.header = {
                 'Host': 'data.10jqka.com.cn',
@@ -64,7 +63,7 @@ class LimitUpStocks:
     #获取涨停原因统计表
     def getReasonStatistics(self):
         reasons = []
-        for row in self.stocks_list.itertuples(index=False):
+        for row in self.limit_up_stocks.itertuples(index=False):
             try:
                 reason = getattr(row,'涨停原因').split('+')
             except:
@@ -75,7 +74,7 @@ class LimitUpStocks:
         concept_stock = {}
         for reason_type_name,_ in reason_type_num.iteritems():
             related_stocks = "" 
-            for row in self.stocks_list.itertuples(index=False):
+            for row in self.limit_up_stocks.itertuples(index=False):
                 try:
                     if reason_type_name in getattr(row,'涨停原因'):
                         related_stocks = related_stocks + getattr(row,'股票名') + " "
@@ -91,13 +90,13 @@ class LimitUpStocks:
         return pds.DataFrame(data=reason_type,columns=self.reason_head)
 
     #导出涨停池及原因统计到excel
-    def exportData(self):
-        t= time.strftime('%Y-%m-%d_%H-%M',time.localtime(time.time()))
-
-        with pds.ExcelWriter(self.save_path,mode='w') as writer: 
-            self.limit_up_stocks.to_excel(writer,index=False,sheet_name=self.date)
-            self.getReasonStatistics.to_excel(writer,sheet_name=self.date,startcol=8)
-
+    def exportData(self,path='limit_up_stocks_'+common.currentTime()+'.xlsx'):
+        try:
+            with pds.ExcelWriter(path,mode='w') as writer: 
+                self.limit_up_stocks.to_excel(writer,index=False,sheet_name=self.date)
+                self.getReasonStatistics.to_excel(writer,sheet_name=self.date,startcol=8)
+        except:
+            pass
 
 #解析涨停池数据包
 def parseLimitUpStockPackage(body):
